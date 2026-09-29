@@ -4,8 +4,10 @@
 set -u
 cd "$(dirname "$0")/.." || exit 1
 UA="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36"
-API="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600&family=Martian+Mono:wght@400;500&display=swap"
+API="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;500&display=swap"
 
+# Climate Crisis лежит локально (OFL), качать его отсюда не нужно —
+# он урезан из 3.7 МБ до 67 КБ и закоммичен как ClimateCrisis-var.woff2.
 mkdir -p site/assets/fonts
 if ! curl -sS --max-time 20 -A "$UA" "$API" -o /tmp/gf.css; then
   echo "нет сети — остаёмся на системных шрифтах"; exit 0
