@@ -1,0 +1,16 @@
+# Картинки не меняются между сборками — держим их в кэше браузера подольше.
+# CSS и JS кэшировать нельзя: их версия зашита в ?v= у ссылок в index.html.
+[[headers]]
+  for = "/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
+[[headers]]
+  for = "/assets/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
