@@ -4,27 +4,18 @@
    цвет — на лабораторной бумаге (светлое).
    ============================================================ */
 
-/* IBM Plex: у пары есть настоящая кириллица, сайт на русском.
-   Субсеты разделены по unicode-range — латиница не тянет кириллический файл. */
-@font-face{font-family:'IBM Plex Sans';src:url('../fonts/IBM-Plex-Sans-latin-400.woff2') format('woff2');
-  font-weight:100 700;font-style:normal;font-display:swap;
-  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-@font-face{font-family:'IBM Plex Sans';src:url('../fonts/IBM-Plex-Sans-cyrillic-400.woff2') format('woff2');
-  font-weight:100 700;font-style:normal;font-display:swap;
-  unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+/* Unbounded и Martian Mono — оба вариативные, один файл на все начертания.
+   Латиница и кириллица разведены по unicode-range: латинская страница
+   не тянет кириллический файл и наоборот. */
+@font-face{font-family:'Unbounded';src:url('../fonts/Unbounded-latin-400.woff2') format('woff2');
+  font-weight:200 900;font-style:normal;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Unbounded';src:url('../fonts/Unbounded-cyrillic-400.woff2') format('woff2');
+  font-weight:200 900;font-style:normal;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
 
-@font-face{font-family:'IBM Plex Mono';src:url('../fonts/IBM-Plex-Mono-latin-400.woff2') format('woff2');
-  font-weight:400;font-style:normal;font-display:swap;
-  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-@font-face{font-family:'IBM Plex Mono';src:url('../fonts/IBM-Plex-Mono-cyrillic-400.woff2') format('woff2');
-  font-weight:400;font-style:normal;font-display:swap;
-  unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
-@font-face{font-family:'IBM Plex Mono';src:url('../fonts/IBM-Plex-Mono-latin-500.woff2') format('woff2');
-  font-weight:500 700;font-style:normal;font-display:swap;
-  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-@font-face{font-family:'IBM Plex Mono';src:url('../fonts/IBM-Plex-Mono-cyrillic-500.woff2') format('woff2');
-  font-weight:500 700;font-style:normal;font-display:swap;
-  unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Martian Mono';src:url('../fonts/Martian-Mono-latin-400.woff2') format('woff2');
+  font-weight:100 800;font-style:normal;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Martian Mono';src:url('../fonts/Martian-Mono-cyrillic-400.woff2') format('woff2');
+  font-weight:100 800;font-style:normal;font-display:swap;unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
 
 :root{
   /* Проявочная */
@@ -42,8 +33,8 @@
   /* Неактиничный фонарь — единственный цвет в интерфейсе, очень скупо */
   --safe:#C4472A;
 
-  --sans:'IBM Plex Sans',-apple-system,'Helvetica Neue',Arial,sans-serif;
-  --mono:'IBM Plex Mono',Menlo,'Courier New',monospace;
+  --sans:'Unbounded',-apple-system,'Helvetica Neue',Arial,sans-serif;
+  --mono:'Martian Mono',Menlo,'Courier New',monospace;
 
   --gut:clamp(20px,5vw,90px);
   --gap:clamp(10px,1.4vw,22px);
@@ -83,9 +74,9 @@ a{color:inherit}
    ============================================================ */
 .bar{
   position:fixed;top:0;left:0;right:0;z-index:80;
-  display:flex;align-items:center;gap:16px 28px;
+  display:flex;align-items:center;gap:14px 22px;
   padding:14px var(--gut);
-  font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;
   color:var(--on-dark);background:transparent;
   transform:translateY(-100%);transition:transform .35s ease,background .35s ease,color .35s ease;
 }
@@ -111,8 +102,8 @@ a{color:inherit}
   letter-spacing:.22em;text-transform:uppercase;color:var(--dim);
 }
 .numeral{
-  font-family:var(--mono);font-size:11px;font-weight:500;
-  letter-spacing:.22em;color:var(--safe);
+  font-family:var(--mono);font-size:10px;font-weight:500;
+  letter-spacing:.1em;color:var(--safe);
 }
 
 /* ============================================================
@@ -128,12 +119,12 @@ a{color:inherit}
 
 .hero__inner{position:relative;z-index:1;max-width:1100px}
 .hero__name{
-  margin:.28em 0 .34em;font-weight:500;letter-spacing:-.035em;line-height:.92;
-  font-size:clamp(46px,9.5vw,148px);
+  margin:.28em 0 .34em;font-weight:500;letter-spacing:-.045em;line-height:1.02;
+  font-size:clamp(32px,6.6vw,104px);
 }
 .hero__meta{
   margin:0;display:flex;flex-wrap:wrap;align-items:center;gap:0 14px;
-  font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);
+  font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);
 }
 .hero__meta i{width:20px;height:1px;background:currentColor;opacity:.5}
 
@@ -142,8 +133,6 @@ a{color:inherit}
   display:flex;align-items:center;justify-content:space-between;gap:20px;
   padding-top:16px;border-top:1px solid rgba(233,228,219,.18);text-decoration:none;
 }
-.hero__arrow{font-size:18px;color:var(--fg);transition:transform .35s ease}
-.hero__cue:hover .hero__arrow{transform:translateY(4px)}
 
 /* ============================================================
    ОГЛАВЛЕНИЕ — строки как в содержании фотокниги
@@ -157,9 +146,9 @@ a{color:inherit}
   text-decoration:none;color:inherit;
 }
 .toc__row:last-child{border-bottom:1px solid rgba(233,228,219,.16)}
-.toc__title{font-size:clamp(22px,3.4vw,44px);font-weight:500;letter-spacing:-.025em;line-height:1.05;
+.toc__title{font-size:clamp(17px,2.5vw,34px);font-weight:500;letter-spacing:-.025em;line-height:1.05;
   transition:transform .3s ease}
-.toc__meta{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+.toc__meta{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
   color:var(--on-dark-dim)}
 .toc__arrow{font-size:17px;color:var(--on-dark-dim);opacity:0;transform:translateX(-6px);
   transition:opacity .3s ease,transform .3s ease}
@@ -185,12 +174,12 @@ a{color:inherit}
   padding-bottom:16px;margin-bottom:clamp(28px,4vw,52px);border-bottom:1px solid currentColor}
 .about__grid{display:flex;flex-wrap:wrap;gap:40px clamp(48px,7vw,110px);align-items:flex-start}
 .about__lead{margin:0;flex:1 1 380px;max-width:52ch;
-  font-size:clamp(19px,2.3vw,28px);line-height:1.45;letter-spacing:-.012em}
-.about__specs{margin:0;display:grid;gap:14px;min-width:210px;
-  font-family:var(--mono);font-size:12px;letter-spacing:.06em}
+  font-size:clamp(15px,1.7vw,21px);line-height:1.55;letter-spacing:-.012em}
+.about__specs{margin:0;display:grid;gap:14px;min-width:230px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.02em}
 .about__specs div{display:flex;justify-content:space-between;gap:24px;
   padding-bottom:10px;border-bottom:1px solid rgba(24,21,18,.16)}
-.about__specs dt{color:var(--on-paper-dim);text-transform:uppercase;letter-spacing:.18em;font-size:10px}
+.about__specs dt{color:var(--on-paper-dim);text-transform:uppercase;letter-spacing:.07em;font-size:9px}
 .about__specs dd{margin:0}
 
 /* ============================================================
@@ -206,8 +195,8 @@ a{color:inherit}
   padding-bottom:16px;margin-bottom:clamp(28px,4vw,56px);
   border-bottom:1px solid currentColor;
 }
-.coll__title{margin:0;font-weight:500;letter-spacing:-.03em;font-size:clamp(28px,4.2vw,58px);line-height:1}
-.coll__meta{margin:0 0 0 auto;font-family:var(--mono);font-size:12px;letter-spacing:.16em;
+.coll__title{margin:0;font-weight:500;letter-spacing:-.04em;font-size:clamp(21px,3vw,42px);line-height:1.05}
+.coll__meta{margin:0 0 0 auto;font-family:var(--mono);font-size:10px;letter-spacing:.09em;
   text-transform:uppercase;color:var(--dim)}
 
 /* --- лента: ряды выключены по ширине ---------------------------
@@ -227,8 +216,8 @@ a{color:inherit}
 .coll--paper .shot img{background:var(--paper-2)}
 
 .shot__no{
-  display:block;margin-top:7px;font-family:var(--mono);font-size:10px;
-  letter-spacing:.18em;color:var(--dim);text-align:left;
+  display:block;margin-top:7px;font-family:var(--mono);font-size:9px;
+  letter-spacing:.08em;color:var(--dim);text-align:left;
 }
 .shot__no span{position:relative;padding-bottom:2px}
 .shot__no span::after{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;
@@ -262,7 +251,7 @@ a{color:inherit}
   background:linear-gradient(180deg,rgba(18,17,16,.18) 0%,rgba(18,17,16,.1) 45%,rgba(18,17,16,.8) 100%)}
 .plate__inner{position:relative;z-index:1;color:var(--on-dark)}
 .plate__title{margin:.2em 0 0;font-weight:500;letter-spacing:-.035em;line-height:1;
-  font-size:clamp(44px,10vw,150px)}
+  font-size:clamp(30px,6.4vw,96px)}
 
 /* ============================================================
    COLOPHON
@@ -271,18 +260,18 @@ a{color:inherit}
   padding:clamp(56px,9vw,120px) var(--gut) clamp(28px,4vw,50px)}
 .colophon__grid{display:flex;flex-wrap:wrap;gap:36px 64px;justify-content:space-between;
   padding-bottom:clamp(40px,6vw,80px);border-bottom:1px solid rgba(233,228,219,.18)}
-.colophon__note{margin:14px 0 0;max-width:42ch;font-size:clamp(17px,2vw,24px);
+.colophon__note{margin:14px 0 0;max-width:42ch;font-size:clamp(15px,1.6vw,19px);
   letter-spacing:-.01em;line-height:1.4}
 .colophon__tally{margin:14px 0 0;display:flex;flex-wrap:wrap;align-items:center;gap:0 12px;
-  font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;
   color:var(--on-dark-dim)}
 .colophon__tally i{width:16px;height:1px;background:currentColor;opacity:.5}
 .colophon__links{list-style:none;margin:0;padding:0;display:grid;gap:10px;
-  font-family:var(--mono);font-size:13px;letter-spacing:.06em}
+  font-family:var(--mono);font-size:11px;letter-spacing:.01em}
 .colophon__links a{text-decoration:none;border-bottom:1px solid rgba(233,228,219,.35);padding-bottom:2px}
 .colophon__links a:hover{border-color:var(--safe);color:var(--safe)}
 .colophon__foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px 20px;
-  margin:20px 0 0;font-family:var(--mono);font-size:11px;letter-spacing:.2em;
+  margin:20px 0 0;font-family:var(--mono);font-size:10px;letter-spacing:.09em;
   text-transform:uppercase;color:var(--on-dark-dim)}
 
 /* ============================================================
@@ -296,11 +285,11 @@ a{color:inherit}
 .viewer__top,.viewer__bar{display:flex;align-items:center;justify-content:space-between;gap:16px}
 .viewer__bar{gap:20px}
 .viewer__id,.viewer__coll,.viewer__count{font-family:var(--mono);font-size:11px;
-  letter-spacing:.16em;text-transform:uppercase;white-space:nowrap;flex:0 0 auto}
+  letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;flex:0 0 auto}
 .viewer__id{color:var(--safe)}
 .viewer__coll,.viewer__count{color:var(--on-dark-dim)}
 .viewer__tools{display:flex;gap:18px}
-.viewer__tool{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+.viewer__tool{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;
   border-bottom:1px solid currentColor;padding-bottom:2px;white-space:nowrap}
 .viewer__tool:hover{color:var(--safe)}
 .viewer__tool[aria-pressed="true"]{color:var(--safe)}
