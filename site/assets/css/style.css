@@ -1,0 +1,362 @@
+/* ============================================================
+   Mikhail Peryshkin — плёнка, Leica M4
+   Смена среды: чб живёт в проявочной (тёмное),
+   цвет — на лабораторной бумаге (светлое).
+   ============================================================ */
+
+/* IBM Plex: у пары есть настоящая кириллица, сайт на русском.
+   Субсеты разделены по unicode-range — латиница не тянет кириллический файл. */
+@font-face{font-family:'IBM Plex Sans';src:url('../fonts/IBM-Plex-Sans-latin-400.woff2') format('woff2');
+  font-weight:100 700;font-style:normal;font-display:swap;
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'IBM Plex Sans';src:url('../fonts/IBM-Plex-Sans-cyrillic-400.woff2') format('woff2');
+  font-weight:100 700;font-style:normal;font-display:swap;
+  unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+
+@font-face{font-family:'IBM Plex Mono';src:url('../fonts/IBM-Plex-Mono-latin-400.woff2') format('woff2');
+  font-weight:400;font-style:normal;font-display:swap;
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'IBM Plex Mono';src:url('../fonts/IBM-Plex-Mono-cyrillic-400.woff2') format('woff2');
+  font-weight:400;font-style:normal;font-display:swap;
+  unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'IBM Plex Mono';src:url('../fonts/IBM-Plex-Mono-latin-500.woff2') format('woff2');
+  font-weight:500 700;font-style:normal;font-display:swap;
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'IBM Plex Mono';src:url('../fonts/IBM-Plex-Mono-cyrillic-500.woff2') format('woff2');
+  font-weight:500 700;font-style:normal;font-display:swap;
+  unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+
+:root{
+  /* Проявочная */
+  --dark:#121110;
+  --dark-2:#1B1917;
+  --on-dark:#E9E4DB;
+  --on-dark-dim:#8B8479;
+
+  /* Лабораторная бумага */
+  --paper:#EDE7DB;
+  --paper-2:#E4DCCC;
+  --on-paper:#181512;
+  --on-paper-dim:#7B7266;
+
+  /* Неактиничный фонарь — единственный цвет в интерфейсе, очень скупо */
+  --safe:#C4472A;
+
+  --sans:'IBM Plex Sans',-apple-system,'Helvetica Neue',Arial,sans-serif;
+  --mono:'IBM Plex Mono',Menlo,'Courier New',monospace;
+
+  --gut:clamp(20px,5vw,90px);
+  --gap:clamp(10px,1.4vw,22px);
+  --cap:min(74vh,720px);      /* потолок высоты ряда в ленте */
+
+  --bg:var(--dark);
+  --fg:var(--on-dark);
+  --dim:var(--on-dark-dim);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;
+  overflow-x:clip;overflow-y:auto;scrollbar-gutter:stable}
+body{
+  margin:0;background:var(--dark);color:var(--fg);
+  font-family:var(--sans);font-size:16px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+html.is-locked,html.is-locked body{overflow:hidden}
+img{display:block;max-width:100%}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--safe);outline-offset:3px}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+}
+
+/* Зерно поверх всего. Один SVG-шум, без картинок. */
+.grain{
+  position:fixed;inset:0;z-index:90;pointer-events:none;opacity:.055;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ============================================================
+   ЛИПКАЯ ШАПКА — где мы и сколько пройдено
+   ============================================================ */
+.bar{
+  position:fixed;top:0;left:0;right:0;z-index:80;
+  display:flex;align-items:center;gap:16px 28px;
+  padding:14px var(--gut);
+  font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--on-dark);background:transparent;
+  transform:translateY(-100%);transition:transform .35s ease,background .35s ease,color .35s ease;
+}
+/* Появляется, только когда шапка-герой уехала: сверху она лишняя. */
+.bar.is-up{transform:none;background:rgba(18,17,16,.88);backdrop-filter:blur(10px)}
+.bar.is-up.is-paper{background:rgba(237,231,219,.9);color:var(--on-paper)}
+.bar__name{opacity:.75}
+.bar__nav{display:flex;gap:18px;margin-left:auto}
+.bar__nav a{font:inherit;letter-spacing:inherit;text-transform:inherit;opacity:.55;
+  text-decoration:none;padding-bottom:2px;border-bottom:1px solid transparent;transition:opacity .2s}
+.bar__nav a:hover{opacity:1}
+.bar__nav a[aria-current="true"]{opacity:1;border-bottom-color:var(--safe)}
+.bar__progress{position:absolute;left:0;right:0;bottom:0;height:1px;background:currentColor;opacity:.18}
+.bar__progress i{display:block;height:100%;background:var(--safe);opacity:1;
+  transform:scaleX(0);transform-origin:0 50%}
+@media (prefers-reduced-motion:reduce){
+  .bar{transition:none}
+}
+
+/* --- служебная типографика ------------------------------------- */
+.eyebrow{
+  margin:0;font-family:var(--mono);font-size:11px;font-weight:500;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--dim);
+}
+.numeral{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  letter-spacing:.22em;color:var(--safe);
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{position:relative;min-height:100svh;display:flex;flex-direction:column;
+  justify-content:flex-end;padding:var(--gut);overflow:hidden}
+.hero__bg{position:absolute;inset:0;z-index:0}
+.hero__bg img{width:100%;height:100%;object-fit:cover}
+/* Кадр уходит в тень, чтобы имя читалось — но не исчезает. */
+.hero__bg::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(18,17,16,.55) 0%,rgba(18,17,16,.35) 40%,rgba(18,17,16,.92) 100%)}
+
+.hero__inner{position:relative;z-index:1;max-width:1100px}
+.hero__name{
+  margin:.28em 0 .34em;font-weight:500;letter-spacing:-.035em;line-height:.92;
+  font-size:clamp(46px,9.5vw,148px);
+}
+.hero__meta{
+  margin:0;display:flex;flex-wrap:wrap;align-items:center;gap:0 14px;
+  font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);
+}
+.hero__meta i{width:20px;height:1px;background:currentColor;opacity:.5}
+
+.hero__cue{
+  position:relative;z-index:1;margin-top:clamp(32px,6vw,72px);
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+  padding-top:16px;border-top:1px solid rgba(233,228,219,.18);text-decoration:none;
+}
+.hero__arrow{font-size:18px;color:var(--fg);transition:transform .35s ease}
+.hero__cue:hover .hero__arrow{transform:translateY(4px)}
+
+/* ============================================================
+   ОГЛАВЛЕНИЕ — строки как в содержании фотокниги
+   ============================================================ */
+.toc{background:var(--dark);color:var(--on-dark);padding:0 var(--gut) clamp(40px,6vw,80px)}
+.toc__row{
+  display:grid;grid-template-columns:auto 1fr auto auto;align-items:baseline;
+  gap:0 clamp(14px,2.4vw,32px);
+  padding:clamp(18px,2.4vw,28px) 0;
+  border-top:1px solid rgba(233,228,219,.16);
+  text-decoration:none;color:inherit;
+}
+.toc__row:last-child{border-bottom:1px solid rgba(233,228,219,.16)}
+.toc__title{font-size:clamp(22px,3.4vw,44px);font-weight:500;letter-spacing:-.025em;line-height:1.05;
+  transition:transform .3s ease}
+.toc__meta{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--on-dark-dim)}
+.toc__arrow{font-size:17px;color:var(--on-dark-dim);opacity:0;transform:translateX(-6px);
+  transition:opacity .3s ease,transform .3s ease}
+.toc__row:hover .toc__title{transform:translateX(8px)}
+.toc__row:hover .toc__arrow{opacity:1;transform:none;color:var(--safe)}
+.toc__row:hover .toc__meta{color:var(--on-dark)}
+@media (prefers-reduced-motion:reduce){
+  .toc__title,.toc__arrow{transition:none}
+  .toc__row:hover .toc__title{transform:none}
+}
+@media (max-width:620px){
+  .toc__row{grid-template-columns:auto 1fr auto;row-gap:4px}
+  .toc__meta{grid-column:2/4}
+  .toc__arrow{display:none}
+}
+
+/* ============================================================
+   ABOUT
+   ============================================================ */
+.about{background:var(--paper);color:var(--on-paper);
+  padding:clamp(56px,9vw,120px) var(--gut)}
+.about__head{display:flex;align-items:baseline;gap:20px;
+  padding-bottom:16px;margin-bottom:clamp(28px,4vw,52px);border-bottom:1px solid currentColor}
+.about__grid{display:flex;flex-wrap:wrap;gap:40px clamp(48px,7vw,110px);align-items:flex-start}
+.about__lead{margin:0;flex:1 1 380px;max-width:52ch;
+  font-size:clamp(19px,2.3vw,28px);line-height:1.45;letter-spacing:-.012em}
+.about__specs{margin:0;display:grid;gap:14px;min-width:210px;
+  font-family:var(--mono);font-size:12px;letter-spacing:.06em}
+.about__specs div{display:flex;justify-content:space-between;gap:24px;
+  padding-bottom:10px;border-bottom:1px solid rgba(24,21,18,.16)}
+.about__specs dt{color:var(--on-paper-dim);text-transform:uppercase;letter-spacing:.18em;font-size:10px}
+.about__specs dd{margin:0}
+
+/* ============================================================
+   КОЛЛЕКЦИЯ
+   ============================================================ */
+.coll{padding:clamp(56px,9vw,130px) var(--gut) clamp(64px,10vw,150px);background:var(--bg);color:var(--fg)}
+#bw,#color,#about{scroll-margin-top:56px}
+.coll--dark{--bg:var(--dark);--fg:var(--on-dark);--dim:var(--on-dark-dim)}
+.coll--paper{--bg:var(--paper);--fg:var(--on-paper);--dim:var(--on-paper-dim)}
+
+.coll__head{
+  display:flex;align-items:baseline;flex-wrap:wrap;gap:8px 20px;
+  padding-bottom:16px;margin-bottom:clamp(28px,4vw,56px);
+  border-bottom:1px solid currentColor;
+}
+.coll__title{margin:0;font-weight:500;letter-spacing:-.03em;font-size:clamp(28px,4.2vw,58px);line-height:1}
+.coll__meta{margin:0 0 0 auto;font-family:var(--mono);font-size:12px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--dim)}
+
+/* --- лента: ряды выключены по ширине ---------------------------
+   flex-grow пропорционален соотношению сторон, basis нулевой —
+   кадры в ряду получают одну высоту и ряд заполняется без обрезки.
+   max-width держит потолок высоты: h = (W - зазоры) / сумма(ar).      */
+.reel{display:flex;flex-direction:column;gap:var(--gap)}
+.row{
+  display:flex;gap:var(--gap);
+  max-width:calc(var(--sumar) * var(--cap) + (var(--n) - 1) * var(--gap));
+  margin-inline:auto;width:100%;
+}
+.shot{flex:var(--ar) 1 0;margin:0;min-width:0;position:relative}
+.shot__btn{display:block;width:100%;position:relative;background:none}
+.shot img{width:100%;height:auto}
+.coll--dark .shot img{background:var(--dark-2)}
+.coll--paper .shot img{background:var(--paper-2)}
+
+.shot__no{
+  display:block;margin-top:7px;font-family:var(--mono);font-size:10px;
+  letter-spacing:.18em;color:var(--dim);text-align:left;
+}
+.shot__no span{position:relative;padding-bottom:2px}
+.shot__no span::after{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;
+  background:var(--safe);transform:scaleX(0);transform-origin:0 50%;transition:transform .3s ease}
+.shot__btn{transition:transform .3s ease}
+.shot__btn img{transition:opacity .3s ease}
+.shot:hover .shot__btn{transform:translateY(-3px)}
+.shot:hover .shot__btn img{opacity:.88}
+.shot:hover .shot__no{color:var(--fg)}
+.shot:hover .shot__no span::after{transform:scaleX(1)}
+@media (prefers-reduced-motion:reduce){
+  .shot__btn,.shot__btn img,.shot__no span::after{transition:none}
+  .shot:hover .shot__btn{transform:none}
+}
+
+/* Мягкое проявление при прокрутке — единственная анимация на странице. */
+.shot{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease}
+.shot.is-in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .shot{opacity:1;transform:none;transition:none}
+}
+
+/* ============================================================
+   ПЕРЕХОД — полноэкранный кадр, за которым среда меняется
+   ============================================================ */
+.plate{position:relative;min-height:88svh;display:flex;align-items:flex-end;
+  padding:var(--gut);overflow:hidden;background:var(--dark)}
+.plate__bg{position:absolute;inset:0}
+.plate__bg img{width:100%;height:100%;object-fit:cover}
+.plate__bg::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(18,17,16,.18) 0%,rgba(18,17,16,.1) 45%,rgba(18,17,16,.8) 100%)}
+.plate__inner{position:relative;z-index:1;color:var(--on-dark)}
+.plate__title{margin:.2em 0 0;font-weight:500;letter-spacing:-.035em;line-height:1;
+  font-size:clamp(44px,10vw,150px)}
+
+/* ============================================================
+   COLOPHON
+   ============================================================ */
+.colophon{background:var(--dark);color:var(--on-dark);
+  padding:clamp(56px,9vw,120px) var(--gut) clamp(28px,4vw,50px)}
+.colophon__grid{display:flex;flex-wrap:wrap;gap:36px 64px;justify-content:space-between;
+  padding-bottom:clamp(40px,6vw,80px);border-bottom:1px solid rgba(233,228,219,.18)}
+.colophon__note{margin:14px 0 0;max-width:42ch;font-size:clamp(17px,2vw,24px);
+  letter-spacing:-.01em;line-height:1.4}
+.colophon__tally{margin:14px 0 0;display:flex;flex-wrap:wrap;align-items:center;gap:0 12px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--on-dark-dim)}
+.colophon__tally i{width:16px;height:1px;background:currentColor;opacity:.5}
+.colophon__links{list-style:none;margin:0;padding:0;display:grid;gap:10px;
+  font-family:var(--mono);font-size:13px;letter-spacing:.06em}
+.colophon__links a{text-decoration:none;border-bottom:1px solid rgba(233,228,219,.35);padding-bottom:2px}
+.colophon__links a:hover{border-color:var(--safe);color:var(--safe)}
+.colophon__foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px 20px;
+  margin:20px 0 0;font-family:var(--mono);font-size:11px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--on-dark-dim)}
+
+/* ============================================================
+   ЛИСТАЛКА
+   ============================================================ */
+.viewer{position:fixed;inset:0;z-index:100;background:#0C0B0A;
+  display:grid;grid-template-rows:auto 1fr auto;grid-template-columns:minmax(0,1fr);
+  gap:clamp(10px,1.6vw,20px);
+  padding:clamp(14px,2.2vw,28px);color:var(--on-dark)}
+.viewer[hidden]{display:none}
+.viewer__top,.viewer__bar{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.viewer__bar{gap:20px}
+.viewer__id,.viewer__coll,.viewer__count{font-family:var(--mono);font-size:11px;
+  letter-spacing:.16em;text-transform:uppercase;white-space:nowrap;flex:0 0 auto}
+.viewer__id{color:var(--safe)}
+.viewer__coll,.viewer__count{color:var(--on-dark-dim)}
+.viewer__tools{display:flex;gap:18px}
+.viewer__tool{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  border-bottom:1px solid currentColor;padding-bottom:2px;white-space:nowrap}
+.viewer__tool:hover{color:var(--safe)}
+.viewer__tool[aria-pressed="true"]{color:var(--safe)}
+
+.viewer__stage{position:relative;display:flex;align-items:center;justify-content:center;
+  min-height:0;min-width:0}
+.viewer__frame{margin:0;max-width:100%;max-height:100%;min-width:0;display:flex}
+.viewer__img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;
+  transition:opacity .12s linear,transform .28s ease;cursor:zoom-in;touch-action:manipulation}
+.viewer.is-swapping .viewer__img{opacity:.25}
+/* Зум 1:1 — плёнку смотрят по зерну. */
+.viewer.is-zoomed .viewer__img{cursor:grab;transition:opacity .12s linear}
+.viewer.is-zoomed .viewer__img:active{cursor:grabbing}
+.viewer.is-zoomed .viewer__frame{overflow:hidden}
+.viewer.is-zoomed .viewer__nav{display:none}
+@media (prefers-reduced-motion:reduce){
+  .viewer__img{transition:opacity .12s linear}
+}
+
+/* Лента миниатюр — прыжок внутри коллекции. */
+.vstrip{display:flex;gap:6px;overflow-x:auto;padding:2px 0;flex:1 1 auto;
+  scrollbar-width:none;justify-content:flex-start}
+.vstrip::-webkit-scrollbar{display:none}
+.vstrip__btn{flex:0 0 auto;width:46px;height:32px;opacity:.38;transition:opacity .2s}
+.vstrip__btn img{width:100%;height:100%;object-fit:cover}
+.vstrip__btn:hover{opacity:.8}
+.vstrip__btn[aria-current="true"]{opacity:1;outline:1px solid var(--safe);outline-offset:1px}
+
+/* Половины сцены листают; стрелки рисуются на псевдоэлементе. */
+.viewer__nav{position:absolute;top:0;height:100%;width:34%;z-index:2}
+.viewer__nav--prev{left:0}
+.viewer__nav--next{right:0}
+.viewer__nav::after{content:'';position:absolute;top:50%;width:13px;height:13px;
+  border-top:1.5px solid var(--on-dark);border-left:1.5px solid var(--on-dark);opacity:0;transition:opacity .2s}
+.viewer__nav--prev::after{left:4px;transform:translateY(-50%) rotate(-45deg)}
+.viewer__nav--next::after{right:4px;transform:translateY(-50%) rotate(135deg)}
+.viewer__nav:hover::after,.viewer__nav:focus-visible::after{opacity:.9}
+
+/* ============================================================
+   Адаптив
+   ============================================================ */
+@media (max-width:900px){
+  :root{--cap:min(62vh,520px)}
+  .coll__meta{margin-left:0;flex-basis:100%}
+}
+@media (max-width:760px){
+  .viewer__tool{letter-spacing:.1em;font-size:10px}
+  .viewer__coll{display:none}
+  .bar__name{display:none}
+  .bar__nav{margin-left:0}
+  .viewer__tools{gap:14px}
+  .vstrip{display:none}
+}
+@media (max-width:620px){
+  /* На телефоне ряды из трёх кадров нечитаемы — раскладываем по одному. */
+  .row{flex-direction:column;max-width:100%}
+  .shot{flex:none}
+  .viewer__nav{width:42%}
+}

@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mikhail Peryshkin — плёночная фотография</title>
+<meta name="description" content="Плёночная фотография, снятая на Leica M4. Две коллекции: чёрно-белая и цветная.">
+<link rel="stylesheet" href="assets/css/style.css?v=1789573276">
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<div class="bar" data-bar>
+  <span class="bar__name">Mikhail Peryshkin</span>
+  <nav class="bar__nav" aria-label="Разделы">
+    <a href="#bw" data-jump="bw">Чёрно-белое</a>
+    <a href="#color" data-jump="color">Цвет</a>
+    <a href="#about" data-jump="about">О съёмке</a>
+  </nav>
+  <span class="bar__progress"><i data-progress></i></span>
+</div>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <div class="hero__bg"><img src="img/bg/bw.webp" alt="" fetchpriority="high"></div>
+  <div class="hero__inner">
+    <p class="eyebrow">Плёночная фотография</p>
+    <h1 class="hero__name">Mikhail<br>Peryshkin</h1>
+    <p class="hero__meta">
+      <span>Leica&nbsp;M4</span><i></i>
+      <span>35&nbsp;мм</span><i></i>
+      <span>Санкт-Петербург</span>
+    </p>
+  </div>
+  <a class="hero__cue" href="#bw">
+    <span class="eyebrow">Две коллекции</span>
+    <span class="hero__arrow" aria-hidden="true">↓</span>
+  </a>
+</header>
+
+<main>
+  <!-- ===================== ОГЛАВЛЕНИЕ ===================== -->
+  <nav class="toc" aria-label="Содержание">
+    <a class="toc__row" href="#bw">
+      <span class="numeral">I</span>
+      <span class="toc__title">BW</span>
+      <span class="toc__meta" data-frames="bw"></span>
+      <span class="toc__arrow" aria-hidden="true">→</span>
+    </a>
+    <a class="toc__row" href="#color">
+      <span class="numeral">II</span>
+      <span class="toc__title">Color</span>
+      <span class="toc__meta" data-frames="color"></span>
+      <span class="toc__arrow" aria-hidden="true">→</span>
+    </a>
+    <a class="toc__row" href="#about">
+      <span class="numeral">III</span>
+      <span class="toc__title">О съёмке</span>
+      <span class="toc__meta">Камера и контакты</span>
+      <span class="toc__arrow" aria-hidden="true">→</span>
+    </a>
+  </nav>
+
+  <!-- ===================== I — BLACK & WHITE ===================== -->
+  <section id="bw" class="coll coll--dark">
+    <div class="coll__head">
+      <span class="numeral">I</span>
+      <h2 class="coll__title">Чёрно-белое</h2>
+      <p class="coll__meta" data-frames="bw"></p>
+    </div>
+    <div class="reel" data-reel="bw"></div>
+  </section>
+
+  <!-- ===================== переход: среда меняется ===================== -->
+  <section class="plate" id="color-plate">
+    <div class="plate__bg"><img src="img/bg/color.webp" alt="" loading="lazy"></div>
+    <div class="plate__inner">
+      <span class="numeral">II</span>
+      <h2 class="plate__title">Цвет</h2>
+    </div>
+  </section>
+
+  <!-- ===================== II — COLOR ===================== -->
+  <section id="color" class="coll coll--paper">
+    <div class="coll__head">
+      <span class="numeral">II</span>
+      <h2 class="coll__title">Цвет</h2>
+      <p class="coll__meta" data-frames="color"></p>
+    </div>
+    <div class="reel" data-reel="color"></div>
+  </section>
+
+  <!-- ===================== III — ABOUT ===================== -->
+  <section id="about" class="about">
+    <div class="about__head">
+      <span class="numeral">III</span>
+      <h2 class="coll__title">О съёмке</h2>
+    </div>
+    <div class="about__grid">
+      <p class="about__lead">
+        Снято на плёнку, камера Leica&nbsp;M4 — механический дальномер без
+        экспонометра и без батарейки. Тридцать шесть кадров за раз, проявка и скан.
+      </p>
+      <dl class="about__specs">
+        <div><dt>Камера</dt><dd>Leica M4</dd></div>
+        <div><dt>Объектив</dt><dd>35 мм</dd></div>
+        <div><dt>Город</dt><dd>Санкт-Петербург</dd></div>
+        <div><dt>Кадров здесь</dt><dd><span data-count="all">69</span></dd></div>
+      </dl>
+    </div>
+  </section>
+</main>
+
+<!-- ===================== COLOPHON ===================== -->
+<footer class="colophon">
+  <div class="colophon__grid">
+    <div>
+      <p class="eyebrow">Связаться</p>
+      <p class="colophon__tally colophon__tally--lead">
+        <span data-frames="all"></span><i></i><span data-count="bw">43</span> чёрно-белых<i></i><span data-count="color">26</span> цветных
+      </p>
+    </div>
+    <ul class="colophon__links">
+      <li><a href="mailto:googlhe522@gmail.com">googlhe522@gmail.com</a></li>
+      <li><a href="https://t.me/googlhe522">@googlhe522</a></li>
+      <li><a href="https://instagram.com/michailpiorishkin">michailpiorishkin</a></li>
+    </ul>
+  </div>
+  <p class="colophon__foot"><span>Mikhail Peryshkin</span><span>Leica M4</span></p>
+</footer>
+
+<!-- ===================== ЛИСТАЛКА ===================== -->
+<div class="viewer" data-viewer hidden role="dialog" aria-modal="true" aria-label="Просмотр кадра">
+  <div class="viewer__top">
+    <span class="viewer__id" data-vid>ЧБ 01</span>
+    <div class="viewer__tools">
+      <button class="viewer__tool" data-zoom aria-pressed="false">1:1</button>
+      <button class="viewer__tool" data-copy>Скопировать ссылку</button>
+      <button class="viewer__tool" data-close>Закрыть</button>
+    </div>
+  </div>
+  <div class="viewer__stage">
+    <button class="viewer__nav viewer__nav--prev" data-prev aria-label="Предыдущий кадр"></button>
+    <figure class="viewer__frame" data-vframe><img class="viewer__img" data-vimg alt=""></figure>
+    <button class="viewer__nav viewer__nav--next" data-next aria-label="Следующий кадр"></button>
+  </div>
+  <div class="viewer__bar">
+    <span class="viewer__coll" data-vcoll>Чёрно-белое</span>
+    <div class="vstrip" data-vstrip></div>
+    <span class="viewer__count" data-vcount>01 / 43</span>
+  </div>
+</div>
+
+<script src="assets/js/photos.js?v=1789573276"></script>
+<script src="assets/js/app.js?v=1789573276"></script>
+</body>
+</html>
